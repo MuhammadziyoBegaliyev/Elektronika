@@ -1,0 +1,114 @@
+{% extends 'quiz/base.html' %}
+
+{% block title %}Natija{% endblock %}
+
+{% block content %}
+<div class="card glass-card">
+    <div class="result-header">
+        <div>
+            <div class="badge">Final Result</div>
+            <h1 class="title">{{ participant.full_name }}, sizning natijangiz</h1>
+
+            {% if score_percent >= 86 %}
+                <p class="subtitle">Ajoyib natija! Siz mavzuni juda yaxshi o‘zlashtirgansiz. 🏆</p>
+            {% elif score_percent >= 60 %}
+                <p class="subtitle">Yaxshi natija! Yana biroz mashq qilsangiz yanada kuchli bo‘lasiz. 🚀</p>
+            {% elif score_percent > 0 %}
+                <p class="subtitle">Natija yomon emas, lekin mavzuni yana bir bor takrorlash foydali bo‘ladi. 📘</p>
+            {% else %}
+                <p class="subtitle">Hozircha natija past. Xavotir olmang, qayta urinib yanada yaxshi ishlashingiz mumkin. 💪</p>
+            {% endif %}
+        </div>
+
+        <div class="score-circle">
+            <span>{{ score_percent }}%</span>
+        </div>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card correct">
+            <h3>{{ correct_count }}</h3>
+            <p>To‘g‘ri javob</p>
+        </div>
+        <div class="stat-card incorrect">
+            <h3>{{ incorrect_count }}</h3>
+            <p>Noto‘g‘ri javob</p>
+        </div>
+        <div class="stat-card unanswered">
+            <h3>{{ unanswered_count }}</h3>
+            <p>Javobsiz</p>
+        </div>
+    </div>
+
+    <h2 class="section-title">Savollar bo‘yicha tahlil</h2>
+
+    <div class="review-list">
+        {% for item in result_data %}
+            <div class="review-card {{ item.status }}">
+                <h3>{{ forloop.counter }}. {{ item.question.text|safe }}</h3>
+
+                <p>
+                    <strong>Sizning javobingiz:</strong>
+                    {% if item.selected_option %}
+                        <span class="user-answer">{{ item.selected_option }}</span>
+                    {% else %}
+                        <span class="user-answer empty-answer">Javob berilmagan</span>
+                    {% endif %}
+                </p>
+
+                <p>
+                    <strong>To‘g‘ri javob:</strong>
+                    <span class="correct-answer">{{ item.correct_option }}</span>
+                </p>
+
+                {% if item.status == 'correct' %}
+                    <p class="status-text success">✅ To‘g‘ri javob berilgansiz</p>
+                {% elif item.status == 'incorrect' %}
+                    <p class="status-text danger">❌ Javob noto‘g‘ri tanlangan</p>
+                {% else %}
+                    <p class="status-text warning">⏱ Vaqt tugagan yoki savol javobsiz qoldirilgan</p>
+                {% endif %}
+            </div>
+        {% empty %}
+            <div class="review-card unanswered">
+                <p>Natijalarni ko‘rsatish uchun ma’lumot topilmadi.</p>
+            </div>
+        {% endfor %}
+    </div>
+
+    <h2 class="section-title">Feedback qoldiring</h2>
+
+    {% if existing_feedback %}
+        <div class="review-card correct">
+            <p class="status-text success">✅ Sizning feedbackingiz saqlangan. Istasangiz uni yangilashingiz mumkin.</p>
+        </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'save_feedback' %}" class="feedback-form">
+        {% csrf_token %}
+        <textarea
+            name="message"
+            rows="5"
+            placeholder="Sayt yoki test haqida fikringizni yozing..."
+        >{% if existing_feedback %}{{ existing_feedback.message }}{% endif %}</textarea>
+
+        <button type="submit" class="btn-primary">Feedback yuborish</button>
+    </form>
+
+    <div class="bottom-actions">
+        <a href="{% url 'start_quiz' %}" class="btn-secondary">Qayta boshlash</a>
+    </div>
+</div>
+{% endblock %}
+
+
+
+.user-answer,
+.correct-answer {
+    font-weight: 700;
+    color: #ffffff;
+}
+
+.empty-answer {
+    color: #fbbf24;
+}

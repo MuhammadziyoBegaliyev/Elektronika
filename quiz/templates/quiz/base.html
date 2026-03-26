@@ -1,0 +1,68 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Quiz App{% endblock %}</title>
+
+    <link rel="stylesheet" href="{% static 'quiz/css/style.css' %}">
+    <link rel="icon" href="data:,">
+
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['\\(', '\\)'], ['$', '$']],
+                displayMath: [['\\[', '\\]'], ['$$', '$$']]
+            },
+            svg: {
+                fontCache: 'global'
+            },
+            options: {
+                skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
+
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div class="page-wrapper">
+        <div class="bg-blur bg1"></div>
+        <div class="bg-blur bg2"></div>
+        <div class="bg-blur bg3"></div>
+
+        <div class="floating-icons" aria-hidden="true">
+            <img src="{% static 'quiz/images/chip.svg' %}" class="icon i1" alt="">
+            <img src="{% static 'quiz/images/resistor.svg' %}" class="icon i2" alt="">
+            <img src="{% static 'quiz/images/circuit.svg' %}" class="icon i3" alt="">
+            <img src="{% static 'quiz/images/wave.svg' %}" class="icon i4" alt="">
+        </div>
+
+        <main class="container main-content">
+            {% block content %}{% endblock %}
+        </main>
+
+        <footer class="site-footer">
+            <div class="footer-content">
+                <p>© 2026 Quiz Platform. Muallif: Muhammadziyo Begaliyev</p>
+                <p>Telegram: <a href="https://t.me/Muhammadziyo7008" target="_blank" rel="noopener noreferrer">@Muhammadziyo7008</a></p>
+                <p>Telefon: <a href="tel:+998901431051">+998 90 143 10 51</a></p>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            if (window.MathJax && window.MathJax.typesetPromise) {
+                MathJax.typesetPromise().catch(function (err) {
+                    console.log("MathJax xatolik:", err.message);
+                });
+            }
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

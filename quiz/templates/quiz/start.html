@@ -1,0 +1,25 @@
+{% extends 'quiz/base.html' %}
+
+{% block title %}Quiz Start{% endblock %}
+
+{% block content %}
+<div class="card glass-card center-card">
+    <div class="badge">Interactive Quiz</div>
+    <h1 class="title">Bilimingizni sinab ko‘ring</h1>
+    <p class="subtitle">
+        Ismingizni kiriting va 10 ta testni ishlang.
+        Har bir savol uchun 40 sekund vaqt beriladi.
+    </p>
+
+    <form method="post" class="form-box">
+        {% csrf_token %}
+        <input type="text" name="full_name" placeholder="Ismingizni kiriting..." class="input-field">
+        
+        {% if error %}
+            <p class="error-text">{{ error }}</p>
+        {% endif %}
+
+        <button type="submit" class="btn-primary">Testni boshlash</button>
+    </form>
+</div>
+{% endblock %}

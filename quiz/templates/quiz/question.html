@@ -1,0 +1,70 @@
+{% extends 'quiz/base.html' %}
+
+{% block title %}Savol {{ current_question_number }}{% endblock %}
+
+{% block content %}
+<div class="card glass-card">
+    <div class="top-bar">
+        <div class="progress-info">
+            <span>Savol {{ current_question_number }}</span>
+            <span>/ {{ total }}</span>
+        </div>
+        <div class="timer-box">
+            ⏳ <span id="timer">{{ time_limit|default:"40" }}</span> sek
+        </div>
+    </div>
+
+    <div class="progress-line">
+        <div class="progress-fill" style="width: {{ progress|default:'0' }}%"></div>
+    </div>
+
+    <h2 class="question-title">{{ question.text|safe }}</h2>
+
+    <form method="post" id="quiz-form">
+        {% csrf_token %}
+        <div class="options-grid">
+            <label class="option-card">
+                <input type="radio" name="selected_option" value="A">
+                <span><strong>A.</strong> {{ question.option_a|safe }}</span>
+            </label>
+
+            <label class="option-card">
+                <input type="radio" name="selected_option" value="B">
+                <span><strong>B.</strong> {{ question.option_b|safe }}</span>
+            </label>
+
+            <label class="option-card">
+                <input type="radio" name="selected_option" value="C">
+                <span><strong>C.</strong> {{ question.option_c|safe }}</span>
+            </label>
+
+            <label class="option-card">
+                <input type="radio" name="selected_option" value="D">
+                <span><strong>D.</strong> {{ question.option_d|safe }}</span>
+            </label>
+        </div>
+
+        <button type="submit" class="btn-primary w-full">Javobni tasdiqlash</button>
+    </form>
+</div>
+
+<script>
+    let timeLeft = parseInt("{{ time_limit|default:'40' }}");
+    const timerEl = document.getElementById("timer");
+    const form = document.getElementById("quiz-form");
+
+    const countdown = setInterval(() => {
+        timeLeft--;
+        timerEl.textContent = timeLeft;
+
+        if (timeLeft <= 10) {
+            timerEl.style.color = "#ff6b6b";
+        }
+
+        if (timeLeft <= 0) {
+            clearInterval(countdown);
+            form.submit();
+        }
+    }, 1000);
+</script>
+{% endblock %}
