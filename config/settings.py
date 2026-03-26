@@ -25,7 +25,10 @@ SECRET_KEY = 'django-insecure-5sd0q4ojbj@e3m&y%tcevfp1veah35300n^0r!1t+x_!*2a(z0
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'elektronika-production.up.railway.app',
+    '127.0.0.1',
+    'localhost',]
 
 
 # Application definition
@@ -126,4 +129,9 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'quiz/static'),
+]
+
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://elektronika-production.up.railway.app',
 ]
